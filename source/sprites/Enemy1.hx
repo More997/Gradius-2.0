@@ -17,9 +17,6 @@ class Enemy1 extends FlxSprite
 		super(X, Y, SimpleGraphic);
 		//loadGraphic(AssetPaths.)
 		sprite = new FlxSprite();
-		sprite.loadGraphic(AssetPaths.Enemigoa__png, true, 32, 16);
-		sprite.animation.add("mov", [0, 1], 2, true);
-	    sprite.animation.play("mov");
 		velocity.x = -velocidad;
 	}
 	public function checkearJugador(altura:Float)

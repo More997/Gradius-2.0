@@ -10,6 +10,8 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import sprites.Enemy1;
+import sprites.Enemy2;
+import sprites.Enemy3;
 import flixel.math.FlxRandom;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
@@ -38,8 +40,8 @@ class PlayState extends FlxState
 	*/
 	private var player:Player;
 	private var enemigo1:Enemy1;
-	private var enemigo2:Enemy1;
-	private var enemigo3:Enemy1;
+	private var enemigo2:Enemy2;
+	private var enemigo3:Enemy3;
 	private var boss:Boss;
 	override public function create():Void
 	{
@@ -92,23 +94,37 @@ class PlayState extends FlxState
 				{
 					case "Player":
 						player = new Player  (x, y);
-						add(player.sprite);
+							player.loadGraphic(AssetPaths.Personaje__png,true,32,16);
+							player.animation.add("mov", [0, 1], 2, true);
+							player.animation.play("mov");
+							add(player);
 						
-					case "Enempigo3":
-						enemigo3 = new Enemy1 (x, y);
-						add(enemigo3.sprite);
-						
+					case "Enemigo3":
+						enemigo3 = new Enemy3 (x, y);
+						enemigo3.loadGraphic(AssetPaths.Enemigo2__png, true, 32, 16);
+						enemigo3.animation.add("mov", [0, 1], 2, true);
+						enemigo3.animation.play("mov");
+						add(enemigo3);
+								
 					case "Enemigo2":
-						enemigo2 = new Enemy1 (x, y);
-						add(enemigo2.sprite);
+						enemigo2 = new Enemy2 (x, y);
+						enemigo2.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+						enemigo2.animation.add("mov", [0, 1], 2, true);
+						enemigo2.animation.play("mov");
+						add(enemigo2);
 						
 					case "Enemigo1":
 						enemigo1 = new Enemy1 (x, y);
-						add(enemigo1.sprite);
-						
+						enemigo1.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+						enemigo1.animation.add("mov", [0, 1], 2, true);
+						enemigo1.animation.play("mov");
+						add(enemigo1);
 					case "Boss":
 						boss = new Boss (x, y);
-						add(boss.sprite);
+						boss.loadGraphic(AssetPaths.Boss__png, true, 32, 32);
+						boss.animation.add("mov", [0, 1], 2, true);
+						boss.animation.play("mov");
+						add(boss);
 					
 					
 				}

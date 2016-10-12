@@ -15,9 +15,7 @@ class Boss extends FlxSprite
 	{
 		super(X, Y, SimpleGraphic);
 		sprite = new FlxSprite();
-		sprite.loadGraphic(AssetPaths.Boss__png, true, 32, 32);
-		sprite.animation.add("mov", [0, 1], 2, true);
-	    sprite.animation.play("mov");
+		
 		  {   if (FlxG.overlap(this, Player.bala))
 			   Player.bala.destroy();
 			   vidaboss -= 1;

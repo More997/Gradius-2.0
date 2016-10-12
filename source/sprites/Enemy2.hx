@@ -19,9 +19,6 @@ class Enemy2 extends FlxSprite
 		super(X, Y, SimpleGraphic);
 		posYinicial = y;
 		sprite = new FlxSprite();
-		sprite.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
-		sprite.animation.add("mov", [0, 1], 2, true);
-	    sprite.animation.play("mov");
 		//loadGraphic(AssetPaths.)
 		velocity.x = -velocidad;
 		velocity.y = 20;
