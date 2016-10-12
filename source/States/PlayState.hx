@@ -9,7 +9,7 @@ import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
-import sprites.Enemy;
+import sprites.Enemy1;
 import flixel.math.FlxRandom;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
@@ -37,9 +37,9 @@ class PlayState extends FlxState
 	private var explosion:FlxSprite;
 	*/
 	private var player:Player;
-	private var enemigo1:Enemy;
-	private var enemigo2:Enemy;
-	private var enemigo3:Enemy;
+	private var enemigo1:Enemy1;
+	private var enemigo2:Enemy1;
+	private var enemigo3:Enemy1;
 	private var boss:Boss;
 	override public function create():Void
 	{
@@ -94,13 +94,13 @@ class PlayState extends FlxState
 						player = new Player  (x, y);
 						
 					case "Enempigo3":
-						enemigo3 = new Enemy (x, y);
+						enemigo3 = new Enemy1 (x, y);
 						
 					case "Enemigo2":
-						enemigo2 = new Enemy (x, y);
+						enemigo2 = new Enemy1 (x, y);
 						
 					case "Enemigo1":
-						enemigo1 = new Enemy (x, y);
+						enemigo1 = new Enemy1 (x, y);
 						
 					case "Boss":
 						boss = new Boss (x, y);
