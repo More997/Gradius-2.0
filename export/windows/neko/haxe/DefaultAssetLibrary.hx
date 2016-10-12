@@ -65,6 +65,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
 		Font.registerFont (__ASSET__flixel_fonts_nokiafc22_ttf);
 		Font.registerFont (__ASSET__flixel_fonts_monsterrat_ttf);
 		
@@ -74,6 +80,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -591,6 +603,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		
 		
 		
+		
+		
+		
+		
+		
+		
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_nokiafc22_ttf);
 		openfl.text.Font.registerFont (__ASSET__OPENFL__flixel_fonts_monsterrat_ttf);
 		
@@ -606,10 +624,22 @@ class DefaultAssetLibrary extends AssetLibrary {
 		type.set ("assets/data/level1.oel", AssetType.TEXT);
 		path.set ("assets/data/New Project.oep", "assets/data/New Project.oep");
 		type.set ("assets/data/New Project.oep", AssetType.TEXT);
+		path.set ("assets/images/Boss.png", "assets/images/Boss.png");
+		type.set ("assets/images/Boss.png", AssetType.IMAGE);
+		path.set ("assets/images/Enemigo2.png", "assets/images/Enemigo2.png");
+		type.set ("assets/images/Enemigo2.png", AssetType.IMAGE);
+		path.set ("assets/images/Enemigo3.png", "assets/images/Enemigo3.png");
+		type.set ("assets/images/Enemigo3.png", AssetType.IMAGE);
+		path.set ("assets/images/Enemigoa.png", "assets/images/Enemigoa.png");
+		type.set ("assets/images/Enemigoa.png", AssetType.IMAGE);
 		path.set ("assets/images/images-go-here.txt", "assets/images/images-go-here.txt");
 		type.set ("assets/images/images-go-here.txt", AssetType.TEXT);
+		path.set ("assets/images/Personaje.png", "assets/images/Personaje.png");
+		type.set ("assets/images/Personaje.png", AssetType.IMAGE);
 		path.set ("assets/images/Tiless.png", "assets/images/Tiless.png");
 		type.set ("assets/images/Tiless.png", AssetType.IMAGE);
+		path.set ("assets/images/upgrade.png", "assets/images/upgrade.png");
+		type.set ("assets/images/upgrade.png", AssetType.IMAGE);
 		path.set ("assets/music/music-goes-here.txt", "assets/music/music-goes-here.txt");
 		type.set ("assets/music/music-goes-here.txt", AssetType.TEXT);
 		path.set ("assets/sounds/sounds-go-here.txt", "assets/sounds/sounds-go-here.txt");
@@ -640,10 +670,28 @@ class DefaultAssetLibrary extends AssetLibrary {
 		id = "assets/data/New Project.oep";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
+		id = "assets/images/Boss.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Enemigo2.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Enemigo3.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/Enemigoa.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/images-go-here.txt";
 		path.set (id, id);
 		type.set (id, AssetType.TEXT);
+		id = "assets/images/Personaje.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
 		id = "assets/images/Tiless.png";
+		path.set (id, id);
+		type.set (id, AssetType.IMAGE);
+		id = "assets/images/upgrade.png";
 		path.set (id, id);
 		type.set (id, AssetType.IMAGE);
 		id = "assets/music/music-goes-here.txt";
@@ -693,6 +741,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 		#if (windows || mac || linux)
 		
 		var useManifest = false;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
+		useManifest = true;
 		useManifest = true;
 		useManifest = true;
 		useManifest = true;
@@ -1443,6 +1497,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 
+
+
+
+
+
+
 @:keep @:bind #if display private #end class __ASSET__flixel_sounds_beep_ogg extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_sounds_flixel_ogg extends null { }
 @:keep @:bind #if display private #end class __ASSET__flixel_fonts_nokiafc22_ttf extends null { }
@@ -1452,6 +1512,12 @@ class DefaultAssetLibrary extends AssetLibrary {
 
 
 #elseif html5
+
+
+
+
+
+
 
 
 

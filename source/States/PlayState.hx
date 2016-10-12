@@ -56,8 +56,8 @@ class PlayState extends FlxState
 		player = new Player();
 		_map.loadEntities(placeEntities, "cosas");
 		
-		add(player);
-		player.makeGraphic(32, 16, 0xFFFF0000);
+		add(player.sprite);
+		//player.makeGraphic(32, 16, 0xFFFF0000);
 		/*jefe = new Jefe();
 		casa1 = new Casas(FlxG.width -(FlxG.width - 16), FlxG.height - 35);
 		add (casa1);
