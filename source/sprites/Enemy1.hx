@@ -10,11 +10,16 @@ import flixel.system.FlxAssets.FlxGraphicAsset;
 class Enemy1 extends FlxSprite
 {
 	private var velocidad = 10;
+	public  var sprite:FlxSprite;
 	public var puedeDisparar:Bool = false;//Acceso publico para poder acceder desde el state y generar ahi una bala.
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
 		//loadGraphic(AssetPaths.)
+		sprite = new FlxSprite();
+		sprite.loadGraphic(AssetPaths.Enemigoa__png, true, 32, 16);
+		sprite.animation.add("mov", [0, 1], 2, true);
+	    sprite.animation.play("mov");
 		velocity.x = -velocidad;
 	}
 	public function checkearJugador(altura:Float)

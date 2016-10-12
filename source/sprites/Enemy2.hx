@@ -12,11 +12,16 @@ class Enemy2 extends FlxSprite
 	private var velocidad = 15;
 	private var posYinicial:Float;
 	private var timerDisparo:Int = 0;
+	public  var sprite:FlxSprite;
 	public var puedeDisparar:Bool = false;//Acceso publico para poder acceder desde el state y generar ahi una bala.
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
 		posYinicial = y;
+		sprite = new FlxSprite();
+		sprite.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+		sprite.animation.add("mov", [0, 1], 2, true);
+	    sprite.animation.play("mov");
 		//loadGraphic(AssetPaths.)
 		velocity.x = -velocidad;
 		velocity.y = 20;
