@@ -18,7 +18,7 @@ class Player extends FlxSprite
 	private var moveY:Int;
 	private var velocidadX:Int = 2;
 	private var velocidadY:Int = 2;
-	private var bala:Bullet1;
+	public static var bala:Bullet1;
 	private var tiempo_1:Int = 0;
 	private var vidas:Int = 0;
 
