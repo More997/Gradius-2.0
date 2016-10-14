@@ -1,7 +1,10 @@
 package states;
 
 import flixel.FlxObject;
+import flixel.group.FlxGroup;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 import sprites.Boss;
+import sprites.Bullet1;
 import sprites.Player;
 import sprites.Powerup;
 import flixel.FlxG;
@@ -21,6 +24,9 @@ import sprites.Powerup;
 class PlayState extends FlxState
 {
 	public var tiempo_1:Int = 0;
+	public var tiempo_2:Int = 0;
+	public var tiempo_3:Int = 0;
+	public var tiempo_4:Int = 0;
 	private var _map:FlxOgmoLoader;
 	private var _mWalls:FlxTilemap;
 	
@@ -41,6 +47,12 @@ class PlayState extends FlxState
 	private var explosion:FlxSprite;
 	*/
 	private var player:Player;
+	private var balasP:FlxTypedGroup <Bullet1>;
+	private var balasB:FlxTypedGroup <Bullet1>;
+	private var balasE3:FlxTypedGroup <Bullet1>;
+	private var enemigos1:FlxTypedGroup <Enemy1>;
+	private var enemigos2:FlxTypedGroup <Enemy2>;
+	private var enemigos3:FlxTypedGroup <Enemy3>;
 	private var enemigo1:Enemy1;
 	private var enemigo2:Enemy2;
 	private var enemigo3:Enemy3;
@@ -50,6 +62,15 @@ class PlayState extends FlxState
 	private var cameraGuide:FlxSprite;
 	override public function create():Void
 	{
+		enemigos1 = new FlxTypedGroup <Enemy1>();
+		enemigos2 = new FlxTypedGroup <Enemy2>();
+		enemigos3 = new FlxTypedGroup <Enemy3>();
+		
+		balasP = new FlxTypedGroup <Bullet1>();
+		balasB = new FlxTypedGroup <Bullet1>();
+		balasE3 = new FlxTypedGroup <Bullet1>();
+		
+		
 		_map = new FlxOgmoLoader(AssetPaths.level1__oel);
 		_mWalls = _map.loadTilemap(AssetPaths.Tiless__png, 16, 16, "tiles");
 		_mWalls.follow();
@@ -72,8 +93,17 @@ class PlayState extends FlxState
 		FlxG.camera.follow(cameraGuide);
 		player.velocity.x = cameraGuide.velocity.x;
 		
+		
+		
 		add(_mWalls);
 		add(cameraGuide);
+		add(balasP);
+		add(balasB);
+		add(balasE3);
+		add(enemigos1);
+		add(enemigos2);
+		add(enemigos3);
+		
 		
 		
 		//player.makeGraphic(32, 16, 0xFFFF0000);
@@ -123,6 +153,7 @@ class PlayState extends FlxState
 						enemigo3.updateHitbox ();
 						enemigo3.animation.add("mov", [0, 1], 2, true);
 						enemigo3.animation.play("mov");
+						enemigos3.add(enemigo3);
 						add(enemigo3);
 								
 					case "Enemigo2":
@@ -131,14 +162,16 @@ class PlayState extends FlxState
 						enemigo2.updateHitbox ();
 						enemigo2.animation.add("mov", [0, 1], 2, true);
 						enemigo2.animation.play("mov");
+						enemigos2.add(enemigo2);
 						add(enemigo2);
 						
 					case "Enemigo1":
 						enemigo1 = new Enemy1 (x, y);
-						enemigo1.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+						enemigo1.loadGraphic(AssetPaths.Enemigoa__png, true, 32, 16);
 						enemigo1.updateHitbox ();
 						enemigo1.animation.add("mov", [0, 1], 2, true);
 						enemigo1.animation.play("mov");
+						enemigos1.add(enemigo1);
 						add(enemigo1);
 						
 					case "Boss":
@@ -168,12 +201,55 @@ class PlayState extends FlxState
 		
 		forEachOfType  (Enemy1, chequeo);
 		
-		if (camera.scroll.x >= camera.maxScrollX)
+		if (cameraGuide.x >= camera.maxScrollX - 150)
 		{
 			cameraGuide.velocity.x = 0;
 			player.velocity.x = 0;
 		}
+		tiempo_2 ++;
+			//disparo player
 		
+			if (FlxG.keys.pressed.SPACE && tiempo_2 >= 5)
+			{
+				var bala = new Bullet1(player.x + player.width / 2, player.y + player.height / 2);
+				balasP.add (bala);
+				tiempo_2 = 0;
+			}
+		tiempo_3 ++;
+			//disparo boss
+			if (tiempo_3 >= 120 && boss.exists)
+			{
+				var b1 = new Bullet1 (boss.x + boss.width / 2, boss.y + boss.height / 2);
+				var b2 = new Bullet1 (boss.x + boss.width / 2, boss.y + boss.height / 2);
+				var b3 = new Bullet1 (boss.x + boss.width / 2, boss.y + boss.height / 2);
+				
+				b1.velocity.x *= -1 / 2;
+				b2.velocity.x *= -1 / 2;
+				b3.velocity.x *= -1 / 2;
+				
+				b2.velocity.y = b2.velocity.x /5;
+				b3.velocity.y = -b3.velocity.x /5;
+				
+				balasB.add (b1);
+				balasB.add (b2);
+				balasB.add (b3);
+				
+				tiempo_3 = 0;
+			}
+			tiempo_4 ++;
+			//disparo enemigo
+			for (i in 0...enemigos3.length)
+			{
+				if (tiempo_4 >= 20)
+					{
+						var b1 = new Bullet1 (enemigos3.members [i].x + enemigos3.members [i].width / 2, enemigos3.members [i].y + enemigos3.members [i].height / 2);
+						balasE3.add (b1);
+						b1.velocity.x = 0;
+						b1.velocity.y = -200;
+						tiempo_4 = 0;
+					}
+			}
+			
 		super.update(elapsed);
 		
 		
@@ -198,28 +274,40 @@ class PlayState extends FlxState
 			player.y = FlxG.width / 2;
 		}
 		//colision player-enemigos
-		if (FlxG.overlap (player, enemigo1))
+		for (i in 0...enemigos1.length)
 		{
-			vidasP --;
-			player.setVida (vidasP);
-			player.x -= 20;
-			player.y = FlxG.width / 2;
+			if (FlxG.overlap (player, enemigos1.members [i]))
+			{
+				vidasP --;
+				player.setVida (vidasP);
+				player.x -= 20;
+				player.y = FlxG.width / 2;
+				
+			}
 		}
 		
-		if (FlxG.overlap (player, enemigo2))
+		for (i in 0...enemigos2.length)
 		{
-			vidasP --;
-			player.setVida (vidasP);
-			player.x -= 20;
-			player.y = FlxG.width / 2;
+			if (FlxG.overlap (player, enemigos2.members [i]))
+			{
+				vidasP --;
+				player.setVida (vidasP);
+				player.x -= 20;
+				player.y = FlxG.width / 2;
+				
+			}
 		}
 		
-		if (FlxG.overlap (player, enemigo3))
+		for (i in 0...enemigos3.length)
 		{
-			vidasP --;
-			player.setVida (vidasP);
-			player.x -= 20;
-			player.y = FlxG.width / 2;
+			if (FlxG.overlap (player, enemigos3.members [i]))
+			{
+				vidasP --;
+				player.setVida (vidasP);
+				player.x -= 20;
+				player.y = FlxG.width / 2;
+				
+			}
 		}
 		
 		if (FlxG.overlap (player, boss))
@@ -230,7 +318,72 @@ class PlayState extends FlxState
 			player.y = FlxG.width / 2;
 		}
 		
+		//colision balas-enemigo
+		for (i in 0...enemigos1.length)
+		{
+			for (j in 0...balasP.length)
+			{
+				if (FlxG.overlap (balasP.members [j], enemigos1.members [i]))
+				{
+					balasP.members [j].destroy();
+					enemigos1.members [i].destroy();
+				}
+			}
+		}
 		
+		for (i in 0...enemigos2.length)
+		{
+			for (j in 0...balasP.length)
+			{
+				if (FlxG.overlap (balasP.members [j], enemigos2.members [i]))
+				{
+					balasP.members [j].destroy();
+					enemigos2.members [i].destroy();
+				}
+			}
+		}
+		
+		for (i in 0...enemigos3.length)
+		{
+			for (j in 0...balasP.length)
+			{
+				if (FlxG.overlap (balasP.members [j], enemigos3.members [i]))
+				{
+					balasP.members [j].destroy();
+					enemigos3.members [i].destroy();
+				}
+			}
+		}
+		
+		//colision bala-boss
+		for (i in 0...balasP.length)
+		{
+			if (FlxG.overlap (boss, balasP.members [i]))
+			{
+				boss.dano ();
+				balasP.members [i].destroy();
+			}
+		}
+		//colision player-balaboss
+		for (i in 0...balasB.length)
+		{
+			if (FlxG.overlap (player, balasB.members [i]))
+			{
+				vidasP --;
+				player.setVida (vidasP);
+				balasB.members [i].destroy();
+			}
+		}
+		//colision player-balaenemigo
+		for (i in 0...balasE3.length)
+		{
+			if (FlxG.overlap (player, balasE3.members [i]))
+			{
+				vidasP --;
+				player.setVida (vidasP);
+				balasE3.members [i].destroy();
+			}
+		}
 		
 	/*
 	//colision con bala de enemigo

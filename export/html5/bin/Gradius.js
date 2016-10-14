@@ -81,7 +81,7 @@ ApplicationMain.init = function() {
 	if(total == 0) ApplicationMain.start();
 };
 ApplicationMain.main = function() {
-	ApplicationMain.config = { build : "129", company : "HaxeFlixel", file : "Gradius", fps : 60, name : "Gradius", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Gradius", vsync : true, width : 512, x : null, y : null}]};
+	ApplicationMain.config = { build : "269", company : "HaxeFlixel", file : "Gradius", fps : 60, name : "Gradius", orientation : "", packageName : "com.example.myapp", version : "0.0.1", windows : [{ antialiasing : 0, background : 0, borderless : false, depthBuffer : false, display : 0, fullscreen : false, hardware : false, height : 480, parameters : "{}", resizable : false, stencilBuffer : true, title : "Gradius", vsync : true, width : 512, x : null, y : null}]};
 };
 ApplicationMain.start = function() {
 	var hasMain = false;
@@ -60532,17 +60532,17 @@ var sprites_Boss = function(X,Y,SimpleGraphic) {
 	if(X == null) X = 0;
 	this.vidaboss = 50;
 	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
-	this.sprite = new flixel_FlxSprite();
-	if(flixel_FlxG.overlap(this,sprites_Player.bala)) sprites_Player.bala.destroy();
-	this.vidaboss -= 1;
-	if(this.vidaboss < 0) this.destroy();
 };
 $hxClasses["sprites.Boss"] = sprites_Boss;
 sprites_Boss.__name__ = ["sprites","Boss"];
 sprites_Boss.__super__ = flixel_FlxSprite;
 sprites_Boss.prototype = $extend(flixel_FlxSprite.prototype,{
-	setVida: function(v) {
-		this.vidaboss = v;
+	update: function(elapsed) {
+		flixel_FlxSprite.prototype.update.call(this,elapsed);
+		if(this.vidaboss == 0) this.destroy();
+	}
+	,dano: function() {
+		this.vidaboss--;
 	}
 	,getVida: function() {
 		return this.vidaboss;
@@ -60562,10 +60562,8 @@ sprites_Bullet1.__super__ = flixel_FlxSprite;
 sprites_Bullet1.prototype = $extend(flixel_FlxSprite.prototype,{
 	update: function(elapsed) {
 		flixel_FlxSprite.prototype.update.call(this,elapsed);
-		if(this.y <= 0) this.destroy();
-		if(this.y >= flixel_FlxG.height) this.destroy();
-		if(this.x <= 0) this.destroy();
-		if(this.x >= flixel_FlxG.width) this.destroy();
+		if(this.x <= flixel_FlxG.camera.scroll.x) this.destroy();
+		if(this.x >= flixel_FlxG.camera.scroll.x + 256) this.destroy();
 	}
 	,__class__: sprites_Bullet1
 });
@@ -60573,23 +60571,17 @@ var sprites_Enemy1 = function(X,Y,SimpleGraphic) {
 	if(Y == null) Y = 0;
 	if(X == null) X = 0;
 	this.puedeDisparar = false;
-	this.velocidad = 10;
+	this.velocidadY = 2;
+	this.velocidad = 100;
 	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
-	this.sprite = new flixel_FlxSprite();
 	this.velocity.set_x(-this.velocidad);
 };
 $hxClasses["sprites.Enemy1"] = sprites_Enemy1;
 sprites_Enemy1.__name__ = ["sprites","Enemy1"];
 sprites_Enemy1.__super__ = flixel_FlxSprite;
 sprites_Enemy1.prototype = $extend(flixel_FlxSprite.prototype,{
-	checkearJugador: function(altura) {
-		if(altura > this.y) this.velocity.set_y(this.velocidad * 2 / 3); else if(altura < this.y) this.velocity.set_y(-this.velocidad * 2 / 3); else {
-			this.velocity.set_y(0);
-			this.puedeDisparar = true;
-			haxe_Log.trace("enemigo 1 puede disparar",{ fileName : "Enemy1.hx", lineNumber : 32, className : "sprites.Enemy1", methodName : "checkearJugador"});
-		}
-		if(this.puedeDisparar) this.puedeDisparar = false;
-		if(this.x < 0) this.destroy();
+	update: function(elapsed) {
+		flixel_FlxSprite.prototype.update.call(this,elapsed);
 	}
 	,__class__: sprites_Enemy1
 });
@@ -60601,7 +60593,6 @@ var sprites_Enemy2 = function(X,Y,SimpleGraphic) {
 	this.velocidad = 15;
 	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
 	this.posYinicial = this.y;
-	this.sprite = new flixel_FlxSprite();
 	this.velocity.set_x(-this.velocidad);
 	this.velocity.set_y(20);
 };
@@ -60621,13 +60612,12 @@ sprites_Enemy2.prototype = $extend(flixel_FlxSprite.prototype,{
 		}
 		if(this.puedeDisparar) this.puedeDisparar = false;
 		this.timerDisparo++;
-		if(this.timerDisparo > 90) {
+		if(this.timerDisparo > 5) {
 			this.timerDisparo = 0;
 			this.puedeDisparar = true;
 			haxe_Log.trace("enemigo 2 puede disparar",{ fileName : "Enemy2.hx", lineNumber : 46, className : "sprites.Enemy2", methodName : "update"});
 		}
 		if(this.puedeDisparar) this.puedeDisparar = false;
-		if(this.x < 0) this.destroy();
 	}
 	,__class__: sprites_Enemy2
 });
@@ -60654,10 +60644,9 @@ sprites_Enemy3.prototype = $extend(flixel_FlxSprite.prototype,{
 		if(this.timerDisparo > 90) {
 			this.timerDisparo = 0;
 			this.puedeDisparar = true;
-			haxe_Log.trace("enemigo 3 puede disparar",{ fileName : "Enemy3.hx", lineNumber : 33, className : "sprites.Enemy3", methodName : "update"});
+			haxe_Log.trace("enemigo 3 puede disparar",{ fileName : "Enemy3.hx", lineNumber : 34, className : "sprites.Enemy3", methodName : "update"});
 		}
 		if(this.puedeDisparar) this.puedeDisparar = false;
-		if(this.x < 0) this.destroy();
 	}
 	,__class__: sprites_Enemy3
 });
@@ -60669,12 +60658,6 @@ var sprites_Player = function(X,Y,SimpleGraphic) {
 	this.velocidadY = 2;
 	this.velocidadX = 2;
 	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
-	this.sprite = new flixel_FlxSprite();
-	this.sprite.set_x(16);
-	this.sprite.set_y(112);
-	this.sprite.loadGraphic("assets/images/Personaje.png",true,32,16);
-	this.sprite.animation.add("mov",[0,1],2,true);
-	this.sprite.animation.play("mov");
 };
 $hxClasses["sprites.Player"] = sprites_Player;
 sprites_Player.__name__ = ["sprites","Player"];
@@ -60687,18 +60670,12 @@ sprites_Player.prototype = $extend(flixel_FlxSprite.prototype,{
 		this.key_left = flixel_FlxG.keys.pressed.get_LEFT();
 		this.key_up = flixel_FlxG.keys.pressed.get_UP();
 		this.key_down = flixel_FlxG.keys.pressed.get_DOWN();
-		if(this.key_right && !this.key_left && this.x < flixel_FlxG.width - this.get_width()) this.moveX = 1; else if(!this.key_right && this.key_left && this.x > 0) this.moveX = -1; else this.moveX = 0;
-		if(this.key_down && !this.key_up && this.y < flixel_FlxG.height - this.get_height()) this.moveY = 1; else if(!this.key_down && this.key_up && this.y > 0) this.moveY = -1; else this.moveY = 0;
+		if(this.key_right && !this.key_left && this.x < flixel_FlxG.camera.scroll.x + 256) this.moveX = 1; else if(!this.key_right && this.key_left && this.x > flixel_FlxG.camera.scroll.x) this.moveX = -1; else this.moveX = 0;
+		if(this.key_down && !this.key_up && this.y < flixel_FlxG.camera.scroll.y + 480) this.moveY = 1; else if(!this.key_down && this.key_up && this.y > 0) this.moveY = -1; else this.moveY = 0;
 		var _g = this;
 		_g.set_x(_g.x + this.moveX * this.velocidadX);
 		var _g1 = this;
 		_g1.set_y(_g1.y + this.moveY * this.velocidadY);
-		this.tiempo_1++;
-		if(flixel_FlxG.keys.pressed.get_SPACE() && this.tiempo_1 >= 5) {
-			sprites_Player.bala = new sprites_Bullet1(this.x + this.get_width() / 2,this.y + this.get_height() / 2);
-			flixel_FlxG.game._state.add(sprites_Player.bala);
-			this.tiempo_1 = 0;
-		}
 		if(this.vidas < 0) this.destroy();
 	}
 	,setVida: function(v) {
@@ -60708,6 +60685,20 @@ sprites_Player.prototype = $extend(flixel_FlxSprite.prototype,{
 		return this.vidas;
 	}
 	,__class__: sprites_Player
+});
+var sprites_Powerup = function(X,Y,SimpleGraphic) {
+	if(Y == null) Y = 0;
+	if(X == null) X = 0;
+	this.tipo = new flixel_math_FlxRandom();
+	flixel_FlxSprite.call(this,X,Y,SimpleGraphic);
+};
+$hxClasses["sprites.Powerup"] = sprites_Powerup;
+sprites_Powerup.__name__ = ["sprites","Powerup"];
+sprites_Powerup.__super__ = flixel_FlxSprite;
+sprites_Powerup.prototype = $extend(flixel_FlxSprite.prototype,{
+	update: function(elapsed) {
+	}
+	,__class__: sprites_Powerup
 });
 var states_MenuState = function(MaxSize) {
 	flixel_FlxState.call(this,MaxSize);
@@ -60726,6 +60717,10 @@ states_MenuState.prototype = $extend(flixel_FlxState.prototype,{
 	,__class__: states_MenuState
 });
 var states_PlayState = function(MaxSize) {
+	this.vidasP = 3;
+	this.tiempo_4 = 0;
+	this.tiempo_3 = 0;
+	this.tiempo_2 = 0;
 	this.tiempo_1 = 0;
 	flixel_FlxState.call(this,MaxSize);
 };
@@ -60734,6 +60729,12 @@ states_PlayState.__name__ = ["states","PlayState"];
 states_PlayState.__super__ = flixel_FlxState;
 states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 	create: function() {
+		this.enemigos1 = new flixel_group_FlxTypedGroup();
+		this.enemigos2 = new flixel_group_FlxTypedGroup();
+		this.enemigos3 = new flixel_group_FlxTypedGroup();
+		this.balasP = new flixel_group_FlxTypedGroup();
+		this.balasB = new flixel_group_FlxTypedGroup();
+		this.balasE3 = new flixel_group_FlxTypedGroup();
 		this._map = new flixel_addons_editors_ogmo_FlxOgmoLoader("assets/data/level1.oel");
 		this._mWalls = this._map.loadTilemap("assets/images/Tiless.png",16,16,"tiles");
 		this._mWalls.follow();
@@ -60742,8 +60743,22 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		this._mWalls.setTileProperties(3,0);
 		this._mWalls.setTileProperties(4,0);
 		this.add(this._mWalls);
-		this.player = new sprites_Player();
 		this._map.loadEntities($bind(this,this.placeEntities),"cosas");
+		flixel_FlxG.camera.setScrollBounds(0,this._mWalls.get_width(),0,this._mWalls.get_height());
+		flixel_FlxG.worldBounds.set(0,0,this._mWalls.get_width(),this._mWalls.get_height());
+		this.cameraGuide = new flixel_FlxSprite(flixel_FlxG.width / 2,flixel_FlxG.height / 2);
+		this.cameraGuide.makeGraphic(1,1,0);
+		this.cameraGuide.velocity.set_x(200);
+		flixel_FlxG.camera.follow(this.cameraGuide);
+		this.player.velocity.set_x(this.cameraGuide.velocity.x);
+		this.add(this._mWalls);
+		this.add(this.cameraGuide);
+		this.add(this.balasP);
+		this.add(this.balasB);
+		this.add(this.balasE3);
+		this.add(this.enemigos1);
+		this.add(this.enemigos2);
+		this.add(this.enemigos3);
 		flixel_FlxState.prototype.create.call(this);
 	}
 	,placeEntities: function(entityName,entityData) {
@@ -60753,6 +60768,7 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		case "Player":
 			this.player = new sprites_Player(x,y);
 			this.player.loadGraphic("assets/images/Personaje.png",true,32,16);
+			this.player.updateHitbox();
 			this.player.animation.add("mov",[0,1],2,true);
 			this.player.animation.play("mov");
 			this.add(this.player);
@@ -60760,36 +60776,216 @@ states_PlayState.prototype = $extend(flixel_FlxState.prototype,{
 		case "Enemigo3":
 			this.enemigo3 = new sprites_Enemy3(x,y);
 			this.enemigo3.loadGraphic("assets/images/Enemigo2.png",true,32,16);
+			this.enemigo3.updateHitbox();
 			this.enemigo3.animation.add("mov",[0,1],2,true);
 			this.enemigo3.animation.play("mov");
+			this.enemigos3.add(this.enemigo3);
 			this.add(this.enemigo3);
 			break;
 		case "Enemigo2":
 			this.enemigo2 = new sprites_Enemy2(x,y);
 			this.enemigo2.loadGraphic("assets/images/Enemigo3.png",true,32,16);
+			this.enemigo2.updateHitbox();
 			this.enemigo2.animation.add("mov",[0,1],2,true);
 			this.enemigo2.animation.play("mov");
+			this.enemigos2.add(this.enemigo2);
 			this.add(this.enemigo2);
 			break;
 		case "Enemigo1":
 			this.enemigo1 = new sprites_Enemy1(x,y);
-			this.enemigo1.loadGraphic("assets/images/Enemigo3.png",true,32,16);
+			this.enemigo1.loadGraphic("assets/images/Enemigoa.png",true,32,16);
+			this.enemigo1.updateHitbox();
 			this.enemigo1.animation.add("mov",[0,1],2,true);
 			this.enemigo1.animation.play("mov");
+			this.enemigos1.add(this.enemigo1);
 			this.add(this.enemigo1);
 			break;
 		case "Boss":
 			this.boss = new sprites_Boss(x,y);
 			this.boss.loadGraphic("assets/images/Boss.png",true,32,32);
+			this.boss.updateHitbox();
 			this.boss.animation.add("mov",[0,1],2,true);
 			this.boss.animation.play("mov");
 			this.add(this.boss);
+			break;
+		case "Powerup":
+			this.powerup = new sprites_Powerup(x,y);
+			this.boss.loadGraphic("assets/images/Boss.png",true,32,32);
+			this.boss.updateHitbox();
+			this.boss.animation.add("mov",[0,1],2,true);
+			this.boss.animation.play("mov");
+			this.add(this.powerup);
 			break;
 		}
 	}
 	,update: function(elapsed) {
 		this.tiempo_1++;
+		this.forEachOfType(sprites_Enemy1,$bind(this,this.chequeo));
+		if(this.cameraGuide.x >= this.get_camera().maxScrollX - 150) {
+			this.cameraGuide.velocity.set_x(0);
+			this.player.velocity.set_x(0);
+		}
+		this.tiempo_2++;
+		if(flixel_FlxG.keys.pressed.get_SPACE() && this.tiempo_2 >= 5) {
+			var bala = new sprites_Bullet1(this.player.x + this.player.get_width() / 2,this.player.y + this.player.get_height() / 2);
+			this.balasP.add(bala);
+			this.tiempo_2 = 0;
+		}
+		this.tiempo_3++;
+		if(this.tiempo_3 >= 120 && this.boss.exists) {
+			var b1 = new sprites_Bullet1(this.boss.x + this.boss.get_width() / 2,this.boss.y + this.boss.get_height() / 2);
+			var b2 = new sprites_Bullet1(this.boss.x + this.boss.get_width() / 2,this.boss.y + this.boss.get_height() / 2);
+			var b3 = new sprites_Bullet1(this.boss.x + this.boss.get_width() / 2,this.boss.y + this.boss.get_height() / 2);
+			var _g = b1.velocity;
+			_g.set_x(_g.x * -0.5);
+			var _g1 = b2.velocity;
+			_g1.set_x(_g1.x * -0.5);
+			var _g2 = b3.velocity;
+			_g2.set_x(_g2.x * -0.5);
+			b2.velocity.set_y(b2.velocity.x / 5);
+			b3.velocity.set_y(-b3.velocity.x / 5);
+			this.balasB.add(b1);
+			this.balasB.add(b2);
+			this.balasB.add(b3);
+			this.tiempo_3 = 0;
+		}
+		this.tiempo_4++;
+		var _g11 = 0;
+		var _g3 = this.enemigos3.length;
+		while(_g11 < _g3) {
+			var i = _g11++;
+			if(this.tiempo_4 >= 20) {
+				var b11 = new sprites_Bullet1(this.enemigos3.members[i].x + this.enemigos3.members[i].get_width() / 2,this.enemigos3.members[i].y + this.enemigos3.members[i].get_height() / 2);
+				this.balasE3.add(b11);
+				b11.velocity.set_x(0);
+				b11.velocity.set_y(-200);
+				this.tiempo_4 = 0;
+			}
+		}
 		flixel_FlxState.prototype.update.call(this,elapsed);
+		if(flixel_FlxG.overlap(this.player,this._mWalls,null,flixel_FlxObject.separate)) {
+			this.vidasP--;
+			this.player.setVida(this.vidasP);
+			var _g4 = this.player;
+			_g4.set_x(_g4.x - 20);
+			this.player.set_y(flixel_FlxG.width / 2);
+		}
+		var _g12 = 0;
+		var _g5 = this.enemigos1.length;
+		while(_g12 < _g5) {
+			var i1 = _g12++;
+			if(flixel_FlxG.overlap(this.player,this.enemigos1.members[i1])) {
+				this.vidasP--;
+				this.player.setVida(this.vidasP);
+				var _g21 = this.player;
+				_g21.set_x(_g21.x - 20);
+				this.player.set_y(flixel_FlxG.width / 2);
+			}
+		}
+		var _g13 = 0;
+		var _g6 = this.enemigos2.length;
+		while(_g13 < _g6) {
+			var i2 = _g13++;
+			if(flixel_FlxG.overlap(this.player,this.enemigos2.members[i2])) {
+				this.vidasP--;
+				this.player.setVida(this.vidasP);
+				var _g22 = this.player;
+				_g22.set_x(_g22.x - 20);
+				this.player.set_y(flixel_FlxG.width / 2);
+			}
+		}
+		var _g14 = 0;
+		var _g7 = this.enemigos3.length;
+		while(_g14 < _g7) {
+			var i3 = _g14++;
+			if(flixel_FlxG.overlap(this.player,this.enemigos3.members[i3])) {
+				this.vidasP--;
+				this.player.setVida(this.vidasP);
+				var _g23 = this.player;
+				_g23.set_x(_g23.x - 20);
+				this.player.set_y(flixel_FlxG.width / 2);
+			}
+		}
+		if(flixel_FlxG.overlap(this.player,this.boss)) {
+			this.vidasP--;
+			this.player.setVida(this.vidasP);
+			var _g8 = this.player;
+			_g8.set_x(_g8.x - 20);
+			this.player.set_y(flixel_FlxG.width / 2);
+		}
+		var _g15 = 0;
+		var _g9 = this.enemigos1.length;
+		while(_g15 < _g9) {
+			var i4 = _g15++;
+			var _g31 = 0;
+			var _g24 = this.balasP.length;
+			while(_g31 < _g24) {
+				var j = _g31++;
+				if(flixel_FlxG.overlap(this.balasP.members[j],this.enemigos1.members[i4])) {
+					this.balasP.members[j].destroy();
+					this.enemigos1.members[i4].destroy();
+				}
+			}
+		}
+		var _g16 = 0;
+		var _g10 = this.enemigos2.length;
+		while(_g16 < _g10) {
+			var i5 = _g16++;
+			var _g32 = 0;
+			var _g25 = this.balasP.length;
+			while(_g32 < _g25) {
+				var j1 = _g32++;
+				if(flixel_FlxG.overlap(this.balasP.members[j1],this.enemigos2.members[i5])) {
+					this.balasP.members[j1].destroy();
+					this.enemigos2.members[i5].destroy();
+				}
+			}
+		}
+		var _g17 = 0;
+		var _g18 = this.enemigos3.length;
+		while(_g17 < _g18) {
+			var i6 = _g17++;
+			var _g33 = 0;
+			var _g26 = this.balasP.length;
+			while(_g33 < _g26) {
+				var j2 = _g33++;
+				if(flixel_FlxG.overlap(this.balasP.members[j2],this.enemigos3.members[i6])) {
+					this.balasP.members[j2].destroy();
+					this.enemigos3.members[i6].destroy();
+				}
+			}
+		}
+		var _g19 = 0;
+		var _g20 = this.balasP.length;
+		while(_g19 < _g20) {
+			var i7 = _g19++;
+			if(flixel_FlxG.overlap(this.boss,this.balasP.members[i7])) {
+				this.boss.dano();
+				this.balasP.members[i7].destroy();
+			}
+		}
+		var _g110 = 0;
+		var _g27 = this.balasB.length;
+		while(_g110 < _g27) {
+			var i8 = _g110++;
+			if(flixel_FlxG.overlap(this.player,this.balasB.members[i8])) {
+				this.vidasP--;
+				this.player.setVida(this.vidasP);
+				this.balasB.members[i8].destroy();
+			}
+		}
+		var _g111 = 0;
+		var _g28 = this.balasE3.length;
+		while(_g111 < _g28) {
+			var i9 = _g111++;
+			if(flixel_FlxG.overlap(this.player,this.balasE3.members[i9])) {
+				this.vidasP--;
+				this.player.setVida(this.vidasP);
+				this.balasE3.members[i9].destroy();
+			}
+		}
+	}
+	,chequeo: function(enemigo1) {
 	}
 	,__class__: states_PlayState
 });

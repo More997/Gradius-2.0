@@ -29,7 +29,6 @@ class Player extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		
 	}
 	
 	override public function update(elapsed:Float):Void
@@ -44,7 +43,7 @@ class Player extends FlxSprite
 			
 			if(key_right && !key_left && x < FlxG.camera.scroll.x + 256)
 			   moveX = 1;
-			else if (!key_right && key_left && x > 0)
+			else if (!key_right && key_left && x > FlxG.camera.scroll.x)
 					 moveX = -1;
 			else
 				moveX = 0;
@@ -59,14 +58,7 @@ class Player extends FlxSprite
 			x += moveX * velocidadX;
 			y += moveY * velocidadY;
 			
-			tiempo_1 ++;
-			//disparo
-			if (FlxG.keys.pressed.SPACE && tiempo_1 >= 5)
-			{
-				bala = new Bullet1(x + width / 2, y + height / 2);
-				FlxG.state.add(bala);
-				tiempo_1 = 0;
-			}
+			
 			
 			//destruccion
 			if (vidas < 0)

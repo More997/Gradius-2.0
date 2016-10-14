@@ -19,7 +19,6 @@ class Enemy2 extends FlxSprite
 	{
 		super(X, Y, SimpleGraphic);
 		posYinicial = y;
-		sprite = new FlxSprite();
 		//loadGraphic(AssetPaths.)
 		velocity.x = -velocidad;
 		velocity.y = 20;
@@ -40,7 +39,7 @@ class Enemy2 extends FlxSprite
 			puedeDisparar = false;
 		}
 		timerDisparo++;
-		if (timerDisparo > 90)
+		if (timerDisparo > 5)
 		{
 			timerDisparo = 0;
 			puedeDisparar = true;
@@ -48,9 +47,10 @@ class Enemy2 extends FlxSprite
 		}
 		if (puedeDisparar)
 			puedeDisparar = false;
-		if (x < 0)//modificar esto al implementar la camara.
-			destroy();
-		if (FlxG.overlap (Player.bala, this))
-			destroy();
+		//if (x < 0)//modificar esto al implementar la camara.
+		
+			//destroy();
+		
+			
 	}
 }
