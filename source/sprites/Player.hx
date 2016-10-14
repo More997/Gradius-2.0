@@ -67,6 +67,8 @@ class Player extends FlxSprite
 				FlxG.state.add(bala);
 				tiempo_1 = 0;
 			}
+			//colision powerup
+			if (FlxG.)
 			//destruccion
 			if (vidas < 0)
 			this.destroy();

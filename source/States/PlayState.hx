@@ -67,9 +67,9 @@ class PlayState extends FlxState
 		cameraGuide.makeGraphic(1, 1, 0x00000000);
 		cameraGuide.velocity.x = 50;
 		FlxG.camera.follow(cameraGuide);
-		player.velocity.x = cameraGuide.velocity.x;
+		//player.velocity.x = cameraGuide.velocity.x;
 		
-		
+		add(_mWalls);
 		add(cameraGuide);
 		
 		
@@ -214,6 +214,7 @@ class PlayState extends FlxState
 			player.y = FlxG.width / 2;
 		}
 		
+		if (FlxG.)
 		
 	/*
 	//colision con bala de enemigo
