@@ -47,14 +47,14 @@ class Player extends FlxSprite
 			key_up    = FlxG.keys.pressed.UP;
 			key_down  = FlxG.keys.pressed.DOWN;
 			
-			if(key_right && !key_left && x < FlxG.width - width)
+			if(key_right && !key_left && x < FlxG.camera.width - width)
 			   moveX = 1;
 			else if (!key_right && key_left && x > 0)
 					 moveX = -1;
 			else
 				moveX = 0;
 				
-			if(key_down && !key_up && y < FlxG.height - height)
+			if(key_down && !key_up && y < FlxG.camera.height - height)
 			   moveY = 1;
 			else if (!key_down && key_up && y > 0)
 					 moveY = -1;

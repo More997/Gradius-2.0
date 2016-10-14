@@ -2,6 +2,7 @@ package sprites;
 
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
+import flixel.FlxG;
 
 /**
  * ...
@@ -48,6 +49,8 @@ class Enemy2 extends FlxSprite
 		if (puedeDisparar)
 			puedeDisparar = false;
 		if (x < 0)//modificar esto al implementar la camara.
+			destroy();
+		if (FlxG.overlap (Player.bala, this))
 			destroy();
 	}
 }

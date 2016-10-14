@@ -43,6 +43,8 @@ class PlayState extends FlxState
 	private var enemigo2:Enemy2;
 	private var enemigo3:Enemy3;
 	private var boss:Boss;
+	private var vidasP:Int = 3;
+	private var cameraGuide:FlxSprite;
 	override public function create():Void
 	{
 		_map = new FlxOgmoLoader(AssetPaths.level1__oel);
@@ -55,8 +57,20 @@ class PlayState extends FlxState
 		
 		add(_mWalls);
 		
-		player = new Player();
 		_map.loadEntities(placeEntities, "cosas");
+		
+		
+		FlxG.camera.setScrollBounds(0, _mWalls.width, 0, _mWalls.height);
+		FlxG.worldBounds.set(0, 0, _mWalls.width, _mWalls.height);
+		
+		cameraGuide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
+		cameraGuide.makeGraphic(1, 1, 0x00000000);
+		cameraGuide.velocity.x = 0;
+		FlxG.camera.follow(cameraGuide);
+		player.velocity.x = cameraGuide.velocity.x;
+		
+		
+		add(cameraGuide);
 		
 		
 		//player.makeGraphic(32, 16, 0xFFFF0000);
@@ -94,7 +108,8 @@ class PlayState extends FlxState
 				{
 					case "Player":
 						player = new Player  (x, y);
-							player.loadGraphic(AssetPaths.Personaje__png,true,32,16);
+							player.loadGraphic(AssetPaths.Personaje__png, true, 32, 16);
+							player.updateHitbox ();
 							player.animation.add("mov", [0, 1], 2, true);
 							player.animation.play("mov");
 							add(player);
@@ -102,6 +117,7 @@ class PlayState extends FlxState
 					case "Enemigo3":
 						enemigo3 = new Enemy3 (x, y);
 						enemigo3.loadGraphic(AssetPaths.Enemigo2__png, true, 32, 16);
+						enemigo3.updateHitbox ();
 						enemigo3.animation.add("mov", [0, 1], 2, true);
 						enemigo3.animation.play("mov");
 						add(enemigo3);
@@ -109,6 +125,7 @@ class PlayState extends FlxState
 					case "Enemigo2":
 						enemigo2 = new Enemy2 (x, y);
 						enemigo2.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+						enemigo2.updateHitbox ();
 						enemigo2.animation.add("mov", [0, 1], 2, true);
 						enemigo2.animation.play("mov");
 						add(enemigo2);
@@ -116,12 +133,14 @@ class PlayState extends FlxState
 					case "Enemigo1":
 						enemigo1 = new Enemy1 (x, y);
 						enemigo1.loadGraphic(AssetPaths.Enemigo3__png, true, 32, 16);
+						enemigo1.updateHitbox ();
 						enemigo1.animation.add("mov", [0, 1], 2, true);
 						enemigo1.animation.play("mov");
 						add(enemigo1);
 					case "Boss":
 						boss = new Boss (x, y);
 						boss.loadGraphic(AssetPaths.Boss__png, true, 32, 32);
+						boss.updateHitbox ();
 						boss.animation.add("mov", [0, 1], 2, true);
 						boss.animation.play("mov");
 						add(boss);
@@ -135,7 +154,69 @@ class PlayState extends FlxState
 	{
 		tiempo_1 ++;
 		
+		enemigo1.checkearJugador (player.y);
+		
 		super.update(elapsed);
+		
+		if (player.y > enemigo1.y)//El enemigo se mueve hacia abajo si el jugador esta mas abajo.
+			enemigo1.y += enemigo1.velocidadY;
+		else if(player.y < enemigo1.y)//El enemigo se mueve hacia arriba si el jugador esta mas arriba.
+			enemigo1.y -= enemigo1.velocidadY;
+			
+		if (FlxG.overlap (Player.bala, enemigo1))
+		Player.bala.destroy();
+		
+		if (FlxG.overlap (Player.bala, enemigo2))
+		Player.bala.destroy();
+		
+		if (FlxG.overlap (Player.bala, enemigo3))
+		Player.bala.destroy();
+		
+		if (FlxG.overlap (Player.bala, boss))
+		//Player.bala.destroy();
+		
+		//colision player-tileset
+		if (FlxG.collide (player, _mWalls))
+		{
+			vidasP --;
+			player.setVida (vidasP);
+			player.x -= 20;
+			player.y = FlxG.width / 2;
+		}
+		//colision player-enemigos
+		if (FlxG.overlap (player, enemigo1))
+		{
+			vidasP --;
+			player.setVida (vidasP);
+			player.x -= 20;
+			player.y = FlxG.width / 2;
+		}
+		
+		if (FlxG.overlap (player, enemigo2))
+		{
+			vidasP --;
+			player.setVida (vidasP);
+			player.x -= 20;
+			player.y = FlxG.width / 2;
+		}
+		
+		if (FlxG.overlap (player, enemigo3))
+		{
+			vidasP --;
+			player.setVida (vidasP);
+			player.x -= 20;
+			player.y = FlxG.width / 2;
+		}
+		
+		if (FlxG.overlap (player, boss))
+		{
+			vidasP --;
+			player.setVida (vidasP);
+			player.x -= 20;
+			player.y = FlxG.width / 2;
+		}
+		
+		
 	/*
 	//colision con bala de enemigo
 		if (FlxG.overlap(Enemigo.bala, Personaje.bala))
