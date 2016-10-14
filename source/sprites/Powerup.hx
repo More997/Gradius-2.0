@@ -20,16 +20,16 @@ class Powerup extends FlxSprite
 	}
 	override public function update (elapsed:Float) :Void
 	{
-		if (FlxG.overlap(this, Player))
+		/*if (FlxG.overlap(this, Player))
 		{
 			var t:Int = tipo.int (0, 3);
 			this.destroy ();
-		}
+		}*/
 	}
-	public function getT () :Int
+	/*public function getT () :Int
 	{
 		return t;
-	}
+	}*/
 	
 	
 }

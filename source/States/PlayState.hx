@@ -3,6 +3,7 @@ package states;
 import flixel.FlxObject;
 import sprites.Boss;
 import sprites.Player;
+import sprites.Powerup;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -43,6 +44,7 @@ class PlayState extends FlxState
 	private var enemigo1:Enemy1;
 	private var enemigo2:Enemy2;
 	private var enemigo3:Enemy3;
+	private var powerup:Powerup;
 	private var boss:Boss;
 	private var vidasP:Int = 3;
 	private var cameraGuide:FlxSprite;
@@ -66,9 +68,9 @@ class PlayState extends FlxState
 		
 		cameraGuide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
 		cameraGuide.makeGraphic(1, 1, 0x00000000);
-		cameraGuide.velocity.x = 50;
+		cameraGuide.velocity.x = 200;
 		FlxG.camera.follow(cameraGuide);
-		//player.velocity.x = cameraGuide.velocity.x;
+		player.velocity.x = cameraGuide.velocity.x;
 		
 		add(_mWalls);
 		add(cameraGuide);
@@ -166,6 +168,11 @@ class PlayState extends FlxState
 		
 		forEachOfType  (Enemy1, chequeo);
 		
+		if (camera.scroll.x >= camera.maxScrollX)
+		{
+			cameraGuide.velocity.x = 0;
+			player.velocity.x = 0;
+		}
 		
 		super.update(elapsed);
 		
@@ -302,7 +309,7 @@ if (tiempo_2 == 60) //cada un intervalo de tiempo
 		}
 		public function chequeo (enemigo1:Enemy1)
 		{
-			enemigo1.checkearJugador (player.y);
+			//enemigo1.checkearJugador (player.y);
 		}
 							
 						

@@ -23,7 +23,7 @@ class Enemy1 extends FlxSprite
 	{
 		super.update(elapsed);
 	}
-	public function checkearJugador(altura:Float)
+	/*public function checkearJugador(altura:Float)
 	{
 		if (altura > y)//El enemigo se mueve hacia abajo si el jugador esta mas abajo.
 			y += velocidadY;
@@ -43,5 +43,5 @@ class Enemy1 extends FlxSprite
 			
 		if (FlxG.collide (Player.bala, this))
 			destroy();
-	}
+	}*/
 }
