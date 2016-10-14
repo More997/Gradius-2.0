@@ -15,6 +15,7 @@ import sprites.Enemy3;
 import flixel.math.FlxRandom;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.tile.FlxTilemap;
+import sprites.Powerup;
 
 class PlayState extends FlxState
 {
@@ -145,6 +146,14 @@ class PlayState extends FlxState
 						boss.animation.add("mov", [0, 1], 2, true);
 						boss.animation.play("mov");
 						add(boss);
+						
+					case "Powerup":
+						powerup = new Powerup (x, y);
+						boss.loadGraphic(AssetPaths.Boss__png, true, 32, 32);
+						boss.updateHitbox ();
+						boss.animation.add("mov", [0, 1], 2, true);
+						boss.animation.play("mov");
+						add(powerup);
 					
 					
 				}
@@ -214,7 +223,7 @@ class PlayState extends FlxState
 			player.y = FlxG.width / 2;
 		}
 		
-		if (FlxG.)
+		
 		
 	/*
 	//colision con bala de enemigo
