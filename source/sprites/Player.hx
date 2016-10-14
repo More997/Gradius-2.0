@@ -29,12 +29,7 @@ class Player extends FlxSprite
 	public function new(?X:Float=0, ?Y:Float=0, ?SimpleGraphic:FlxGraphicAsset) 
 	{
 		super(X, Y, SimpleGraphic);
-		sprite = new FlxSprite();
-		sprite.x = 16;
-	sprite.y =	112;
-		sprite.loadGraphic(AssetPaths.Personaje__png,true,32,16);
-		sprite.animation.add("mov", [0, 1], 2, true);
-	    sprite.animation.play("mov");
+		
 	}
 	
 	override public function update(elapsed:Float):Void

@@ -65,7 +65,7 @@ class PlayState extends FlxState
 		
 		cameraGuide = new FlxSprite(FlxG.width / 2, FlxG.height / 2);
 		cameraGuide.makeGraphic(1, 1, 0x00000000);
-		cameraGuide.velocity.x = 0;
+		cameraGuide.velocity.x = 50;
 		FlxG.camera.follow(cameraGuide);
 		player.velocity.x = cameraGuide.velocity.x;
 		
@@ -108,11 +108,11 @@ class PlayState extends FlxState
 				{
 					case "Player":
 						player = new Player  (x, y);
-							player.loadGraphic(AssetPaths.Personaje__png, true, 32, 16);
-							player.updateHitbox ();
-							player.animation.add("mov", [0, 1], 2, true);
-							player.animation.play("mov");
-							add(player);
+						player.loadGraphic(AssetPaths.Personaje__png, true, 32, 16);
+						player.updateHitbox ();
+						player.animation.add("mov", [0, 1], 2, true);
+						player.animation.play("mov");
+						add(player);
 						
 					case "Enemigo3":
 						enemigo3 = new Enemy3 (x, y);
@@ -137,6 +137,7 @@ class PlayState extends FlxState
 						enemigo1.animation.add("mov", [0, 1], 2, true);
 						enemigo1.animation.play("mov");
 						add(enemigo1);
+						
 					case "Boss":
 						boss = new Boss (x, y);
 						boss.loadGraphic(AssetPaths.Boss__png, true, 32, 32);
@@ -154,16 +155,13 @@ class PlayState extends FlxState
 	{
 		tiempo_1 ++;
 		
-		enemigo1.checkearJugador (player.y);
+		forEachOfType  (Enemy1, chequeo);
+		
 		
 		super.update(elapsed);
 		
-		if (player.y > enemigo1.y)//El enemigo se mueve hacia abajo si el jugador esta mas abajo.
-			enemigo1.y += enemigo1.velocidadY;
-		else if(player.y < enemigo1.y)//El enemigo se mueve hacia arriba si el jugador esta mas arriba.
-			enemigo1.y -= enemigo1.velocidadY;
-			
-		if (FlxG.overlap (Player.bala, enemigo1))
+		
+		/*if (FlxG.overlap (Player.bala, enemigo1))
 		Player.bala.destroy();
 		
 		if (FlxG.overlap (Player.bala, enemigo2))
@@ -174,7 +172,7 @@ class PlayState extends FlxState
 		
 		if (FlxG.overlap (Player.bala, boss))
 		//Player.bala.destroy();
-		
+		*/
 		//colision player-tileset
 		if (FlxG.collide (player, _mWalls))
 		{
@@ -291,7 +289,11 @@ if (tiempo_2 == 60) //cada un intervalo de tiempo
 						
 											
 							}*/
-							}
+		}
+		public function chequeo (enemigo1:Enemy1)
+		{
+			enemigo1.checkearJugador (player.y);
+		}
 							
 						
-						}
+	}

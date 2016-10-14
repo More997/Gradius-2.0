@@ -19,25 +19,29 @@ class Enemy1 extends FlxSprite
 		//loadGraphic(AssetPaths.)
 		velocity.x = -velocidad;
 	}
+	override public function update (elapsed:Float) :Void
+	{
+		super.update(elapsed);
+	}
 	public function checkearJugador(altura:Float)
 	{
-		/*if (altura > y)//El enemigo se mueve hacia abajo si el jugador esta mas abajo.
-			velocity.y = velocidad*2/3;
+		if (altura > y)//El enemigo se mueve hacia abajo si el jugador esta mas abajo.
+			y += velocidadY;
 		else if(altura < y)//El enemigo se mueve hacia arriba si el jugador esta mas arriba.
-			velocity.y = -velocidad*2/3;
+			y -= velocidadY;
 		else//El enemigo se mantiene su altura si es la misma que la del jugador.
 		{
-			velocity.y = 0;
+			//velocity.y = 0;
 			puedeDisparar = true;
 			trace("enemigo 1 puede disparar");
-		}*/
+		}
 		if (puedeDisparar)
 			puedeDisparar = false;
 			
 		if (x < 0)//modificar esto al implementar la camara.
 			destroy();
 			
-		if (FlxG.overlap (Player.bala, this))
+		if (FlxG.collide (Player.bala, this))
 			destroy();
 	}
 }

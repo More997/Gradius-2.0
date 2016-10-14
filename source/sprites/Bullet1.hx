@@ -17,7 +17,7 @@ class Bullet1 extends FlxSprite
 	override public function update(elapsed:Float):Void
 	{	
 		super.update(elapsed);
-		if (x <= 0)
+		if (x <= FlxG.camera.scroll.x)
 		destroy();
 		if (x >= FlxG.camera.scroll.x + 256)
 		destroy();
